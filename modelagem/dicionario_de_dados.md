@@ -13,7 +13,7 @@ Este documento descreve a estrutura de dados das duas abordagens propostas para 
 | `phone` | VARCHAR(20) | `NULL` | Telefone do profissional | A / B |
 | `public_profile` | BOOLEAN | `NOT NULL` | Lista de planos aceitos (objeto JSON) | A / B |
 | `speciality` | VARCHAR(100) | `NULL` | Lista de planos aceitos (objeto JSON) | A / B |
-| `accepted_plans` | JSONB | `NULL` | Lista de planos aceitos (objeto JSON) | **B** |
+| `accepted_plans` | JSONB | `NULL` | Lista de planos aceitos (objeto JSON) | **A** |
 | `created_at` | TIMESTAMP | `DEFAULT now()` | Data de criação do registro | A / B |
 | `updated_at` | TIMESTAMP | `DEFAULT now()` | Data da última atualização | A / B |
 
@@ -23,11 +23,11 @@ Este documento descreve a estrutura de dados das duas abordagens propostas para 
 
 | Campo | Tipo de Dado | Restrições | Descrição | Proposta |
 |--------|---------------|-------------|------------|-----------|
-| `id` | SERIAL | `PRIMARY KEY` | Identificador único do plano de saúde | **A** |
-| `name` | VARCHAR(100) | `NOT NULL`, `UNIQUE` | Nome do plano de saúde (ex: Unimed, Bradesco Saúde) | **A** |
-| `category` | VARCHAR(100) | `NOT NULL` | Categoria ou abrangência (ex: Nacional, Regional) | **A** |
-| `coverage` | TEXT[] | `NULL` | Lista de coberturas (ex: consultas, exames, terapias) | **A** |
-| `created_at` | TIMESTAMP | `DEFAULT now()` | Data de criação do registro | **A** |
+| `id` | SERIAL | `PRIMARY KEY` | Identificador único do plano de saúde | **B** |
+| `name` | VARCHAR(100) | `NOT NULL`, `UNIQUE` | Nome do plano de saúde (ex: Unimed, Bradesco Saúde) | **B** |
+| `category` | VARCHAR(100) | `NOT NULL` | Categoria ou abrangência (ex: Nacional, Regional) | **B** |
+| `coverage` | TEXT[] | `NULL` | Lista de coberturas (ex: consultas, exames, terapias) | **B** |
+| `created_at` | TIMESTAMP | `DEFAULT now()` | Data de criação do registro | **B** |
 
 ---
 
@@ -35,23 +35,22 @@ Este documento descreve a estrutura de dados das duas abordagens propostas para 
 
 | Campo | Tipo de Dado | Restrições | Descrição | Proposta |
 |--------|---------------|-------------|------------|-----------|
-| `id` | SERIAL | `PRIMARY KEY` | Identificador único do relacionamento | **A** |
-| `professional_id` | INTEGER | `NOT NULL`, `FOREIGN KEY` → `professionals.id` | Referência ao profissional | **A** |
-| `health_plan_id` | INTEGER | `NOT NULL`, `FOREIGN KEY` → `health_plans.id` | Referência ao plano de saúde aceito | **A** |
-| `active` | BOOLEAN | `DEFAULT TRUE` | Indica se o profissional ainda aceita o plano | **A** |
-| `created_at` | TIMESTAMP | `DEFAULT now()` | Data de criação do relacionamento | **A** |
-| `updated_at` | TIMESTAMP | `DEFAULT now()` | Data da última atualização do relacionamento | **A** |
+| `id` | SERIAL | `PRIMARY KEY` | Identificador único do relacionamento | **B** |
+| `professional_id` | INTEGER | `NOT NULL`, `FOREIGN KEY` → `professionals.id` | Referência ao profissional | **B** |
+| `health_plan_id` | INTEGER | `NOT NULL`, `FOREIGN KEY` → `health_plans.id` | Referência ao plano de saúde aceito | **B** |
+| `active` | BOOLEAN | `DEFAULT TRUE` | Indica se o profissional ainda aceita o plano | **B** |
+| `created_at` | TIMESTAMP | `DEFAULT now()` | Data de criação do relacionamento | **B** |
 
 ---
 
 ### Observações Gerais
 
-- **Campos comuns às duas propostas**: `id`, `name`, `email`, `created_at`, `updated_at`.
+- **Campos comuns às duas propostas**: `id`, `email`, `created_at`, `updated_at`.
 - **Diferenças principais**:
-  - A **Proposta A** utiliza tabelas normalizadas (`health_plans` e `professional_health_insurances`).
-  - A **Proposta B** armazena os planos aceitos no campo `accepted_plans` (`JSONB`).
+  - A **Proposta A** armazena os planos aceitos no campo `accepted_plans` (`JSONB`).
+  - A **Proposta B** utiliza tabelas normalizadas (`health_plans` e `professional_health_insurances`).
 - **Validação de e-mail** é feita com `CITEXT`, garantindo insensibilidade a maiúsculas/minúsculas.
-- **Coberturas** (`coverage`) podem ser armazenadas como `TEXT[]` (Proposta A) ou dentro do `JSONB` (Proposta B).
+- **Coberturas** dentro do `JSONB` (Proposta A) ou (`coverage`) podem ser armazenadas como `TEXT[]` (Proposta B).
 - **Campos de auditoria** (`created_at`, `updated_at`) permitem controle temporal e versionamento simples.
 
 ---
