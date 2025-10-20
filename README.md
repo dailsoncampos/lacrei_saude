@@ -7,33 +7,7 @@ O desafio foi resolvido apresentando **duas abordagens distintas de modelagem** 
 
 ---
 
-### Proposta A — Modelo Normalizado (com tabela de relacionamento)
-
-#### Descrição
-
-Neste modelo, temos as tabelas principais:
-- `professionals`
-- `health_plans`
-- `professional_health_plans` (tabela associativa)
-
-Cada profissional pode aceitar vários planos, e cada plano pode ser aceito por vários profissionais (**relação N:N**).
-
-#### Vantagens
-- Forte **integridade referencial**
-- Facilita **consultas complexas** (joins entre profissionais e planos)
-- Melhor **controle de versionamento e histórico**
-- Facilita manutenção e migração
-
-#### Desvantagens
-- Estrutura mais **verbosa**
-- Exige **joins** em consultas simples
-
-#### Quando usar
-Ideal em sistemas que precisam **garantir que os dados estejam corretos e auditáveis**, mesmo que isso exija mais estrutura e manutenção.
-
----
-
-### Proposta B — Modelo com `jsonb` (flexível e semi-estruturado)
+### Proposta A — Modelo com `jsonb` (flexível e semi-estruturado)
 
 #### Descrição
 
@@ -115,9 +89,35 @@ WHERE accepted_plans @> '[{"name": "Unimed Nacional"}]';
 
 ---
 
+### Proposta B — Modelo Normalizado (com tabela de relacionamento)
+
+#### Descrição
+
+Neste modelo, temos as tabelas principais:
+- `professionals`
+- `health_plans`
+- `professional_health_plans` (tabela associativa)
+
+Cada profissional pode aceitar vários planos, e cada plano pode ser aceito por vários profissionais (**relação N:N**).
+
+#### Vantagens
+- Forte **integridade referencial**
+- Facilita **consultas complexas** (joins entre profissionais e planos)
+- Melhor **controle de versionamento e histórico**
+- Facilita manutenção e migração
+
+#### Desvantagens
+- Estrutura mais **verbosa**
+- Exige **joins** em consultas simples
+
+#### Quando usar
+Ideal em sistemas que precisam **garantir que os dados estejam corretos e auditáveis**, mesmo que isso exija mais estrutura e manutenção.
+
+---
+
 ## 3. Reflexão sobre as abordagens
 
-| Critério | **Proposta A — Modelo Normalizado** | **Proposta B — Modelo com JSONB** |
+| Critério | **Proposta A — Modelo com JSONB** | **Proposta B — Modelo Normalizado** |
 |-----------|------------------------------------|-----------------------------------|
 | **Integridade dos dados** | Alta (FKs, constraints) | Limitada (sem FKs entre planos) |
 | **Flexibilidade de esquema** | Média (migrações necessárias) | Alta (estrutura mutável) |
@@ -132,7 +132,7 @@ WHERE accepted_plans @> '[{"name": "Unimed Nacional"}]';
 
 ### Interpretação
 
-- A **Proposta A** é ideal para **sistemas maduros**, que exigem **consistência e rastreabilidade**, como ambientes hospitalares ou plataformas com integrações múltiplas.  
-- A **Proposta B** é indicada para **fase inicial de produto**, onde o formato dos planos pode mudar com frequência, e há foco em **agilidade e iteração**.
+- A **Proposta A** é indicada para **fase inicial de produto**, onde o formato dos planos pode mudar com frequência, e há foco em **agilidade e iteração**.
+- A **Proposta B** é ideal para **sistemas maduros**, que exigem **consistência e rastreabilidade**, como ambientes hospitalares ou plataformas com integrações múltiplas.
 
 ---
