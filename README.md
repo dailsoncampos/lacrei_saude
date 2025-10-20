@@ -3,7 +3,7 @@
 
 ## 1. Modelagem de Dados
 
-O desafio foi resolvido apresentando **duas abordagens distintas de modelagem** do relacionamento entre **profissionais** e **planos de saúde**.
+A seguir são apresentadas **duas abordagens distintas de modelagem** do relacionamento entre **profissionais** e **planos de saúde**.
 
 ---
 
