@@ -1,6 +1,6 @@
 -- Proposta B: Estrutura relacional normalizada
 
-\echo 'Criando tabelas - Proposta B (relacional com tabela de domínio)'
+\echo 'Criando tabelas - Proposta de Modelo Relacional'
 
 -- Tabela: professionals
 CREATE TABLE IF NOT EXISTS professionals (
@@ -35,4 +35,4 @@ CREATE TABLE IF NOT EXISTS professionals_health_insurances (
     UNIQUE (professional_id, health_insurance_id)
 );
 
-\echo 'Tabelas da Proposta B criadas com sucesso!'
+\echo 'Tabelas da Proposta de Modelo Relacional criadas com sucesso!'

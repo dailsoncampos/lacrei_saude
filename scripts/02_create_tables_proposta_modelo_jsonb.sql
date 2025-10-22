@@ -1,6 +1,6 @@
 -- Proposta A: Estrutura utilizando JSONB para planos aceitos
 
-\echo 'Criando tabelas - Proposta A (com JSONB)'
+\echo 'Criando tabelas - Proposta de Modelo com JSONB'
 
 -- Tabela: professionals
 CREATE TABLE IF NOT EXISTS professionals (
@@ -15,4 +15,4 @@ CREATE TABLE IF NOT EXISTS professionals (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
-\echo 'Tabelas da Proposta A criadas com sucesso!'
+\echo 'Tabelas da Proposta de Modelo com JSONB criadas com sucesso!'

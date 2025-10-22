@@ -1,8 +1,8 @@
 -- ============================================================
--- Proposta B (modelo relacional)
+-- Proposta Modelo Relacional
 -- ============================================================
 
-\echo 'Inserindo dados para Proposta B (relacional)'
+\echo 'Inserindo dados para Proposta Modelo Relacional'
 
 -- Inserir planos de saúde (tabela de domínio)
 INSERT INTO health_insurances (name, category, coverage, active)

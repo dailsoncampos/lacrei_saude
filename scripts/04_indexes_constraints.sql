@@ -1,4 +1,4 @@
--- Índices específicos para a Proposta A
+-- Índices específicos para a Proposta de Modelo com JSONB
 DO $$
 BEGIN
     -- Verifica se a coluna JSONB "plans_accepted" existe em professionals
@@ -14,7 +14,7 @@ BEGIN
     END IF;
 END $$;
 
--- Índices específicos para a Proposta B
+-- Índices específicos para a Proposta de Modelo Relacional
 DO $$
 BEGIN
     -- Verifica se a tabela health_insurances existe antes de criar o índice

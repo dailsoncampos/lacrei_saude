@@ -1,8 +1,8 @@
 -- ============================================================
--- Proposta A (modelo com JSONB)
+-- Proposta Modelo JSONB
 -- ============================================================
 
-\echo 'Inserindo dados para Proposta A'
+\echo 'Inserindo dados para Proposta Modelo JSONB'
 
 INSERT INTO professionals (full_name, email, phone, specialty, plans_accepted)
 VALUES
