@@ -7,15 +7,15 @@ Este documento descreve a estrutura de dados das duas abordagens propostas para 
 
 | Campo | Tipo de Dado | Restrições | Descrição | Proposta |
 |--------|---------------|-------------|------------|-----------|
-| `id` | SERIAL | `PRIMARY KEY` | Identificador único do profissional | A / B |
-| `full_name` | VARCHAR(100) | `NOT NULL` | Nome completo do profissional | A / B |
-| `email` | CITEXT | `NOT NULL`, `UNIQUE` | E-mail de contato (case-insensitive) | A / B |
-| `phone` | VARCHAR(20) | `NULL` | Telefone do profissional | A / B |
-| `public_profile` | BOOLEAN | `NOT NULL` | Lista de planos aceitos (objeto JSON) | A / B |
-| `speciality` | VARCHAR(100) | `NULL` | Lista de planos aceitos (objeto JSON) | A / B |
-| `accepted_plans` | JSONB | `NULL` | Lista de planos aceitos (objeto JSON) | **A** |
-| `created_at` | TIMESTAMP | `DEFAULT now()` | Data de criação do registro | A / B |
-| `updated_at` | TIMESTAMP | `DEFAULT now()` | Data da última atualização | A / B |
+| `id` | SERIAL | `PRIMARY KEY` | Identificador único do profissional | Ambas as propostas |
+| `full_name` | VARCHAR(100) | `NOT NULL` | Nome completo do profissional | Ambas as propostas |
+| `email` | CITEXT | `NOT NULL`, `UNIQUE` | E-mail de contato (case-insensitive) | Ambas as propostas |
+| `phone` | VARCHAR(20) | `NULL` | Telefone de contato do profissional | Ambas as propostas |
+| `public_profile` | BOOLEAN | `NOT NULL`, `DEFAULT TRUE` | Indica se o perfil é público na plataforma | Ambas as propostas |
+| `speciality` | VARCHAR(100) | `NULL` | Especialidade principal do profissional (ex: Psicologia, Fisioterapia) | Ambas as propostas |
+| `accepted_plans` | JSONB | `NULL` | Lista de planos aceitos (objeto JSON) | **Proposta de Modelo com JSONB** |
+| `created_at` | TIMESTAMP | `DEFAULT now()` | Data de criação do registro | Ambas as propostas |
+| `updated_at` | TIMESTAMP | `DEFAULT now()` | Data da última atualização | Ambas as propostas |
 
 ---
 
@@ -23,11 +23,11 @@ Este documento descreve a estrutura de dados das duas abordagens propostas para 
 
 | Campo | Tipo de Dado | Restrições | Descrição | Proposta |
 |--------|---------------|-------------|------------|-----------|
-| `id` | SERIAL | `PRIMARY KEY` | Identificador único do plano de saúde | **B** |
-| `name` | VARCHAR(100) | `NOT NULL`, `UNIQUE` | Nome do plano de saúde (ex: Unimed, Bradesco Saúde) | **B** |
-| `category` | VARCHAR(100) | `NOT NULL` | Categoria ou abrangência (ex: Nacional, Regional) | **B** |
-| `coverage` | TEXT[] | `NULL` | Lista de coberturas (ex: consultas, exames, terapias) | **B** |
-| `created_at` | TIMESTAMP | `DEFAULT now()` | Data de criação do registro | **B** |
+| `id` | SERIAL | `PRIMARY KEY` | Identificador único do plano de saúde | **Proposta de Modelo Relacional** |
+| `name` | VARCHAR(100) | `NOT NULL`, `UNIQUE` | Nome do plano de saúde (ex: Unimed Nacional, Bradesco Saúde) | **Proposta de Modelo Relacional** |
+| `category` | VARCHAR(100) | `NOT NULL` | Categoria ou abrangência (ex: Nacional, Regional) | **Proposta de Modelo Relacional** |
+| `coverage` | TEXT[] | `NULL` | Lista de coberturas (ex: consultas, exames, terapias) | **Proposta de Modelo Relacional** |
+| `created_at` | TIMESTAMP | `DEFAULT now()` | Data de criação do registro | **Proposta de Modelo Relacional** |
 
 ---
 
@@ -35,11 +35,11 @@ Este documento descreve a estrutura de dados das duas abordagens propostas para 
 
 | Campo | Tipo de Dado | Restrições | Descrição | Proposta |
 |--------|---------------|-------------|------------|-----------|
-| `id` | SERIAL | `PRIMARY KEY` | Identificador único do relacionamento | **B** |
-| `professional_id` | INTEGER | `NOT NULL`, `FOREIGN KEY` → `professionals.id` | Referência ao profissional | **B** |
-| `health_plan_id` | INTEGER | `NOT NULL`, `FOREIGN KEY` → `health_plans.id` | Referência ao plano de saúde aceito | **B** |
-| `active` | BOOLEAN | `DEFAULT TRUE` | Indica se o profissional ainda aceita o plano | **B** |
-| `created_at` | TIMESTAMP | `DEFAULT now()` | Data de criação do relacionamento | **B** |
+| `id` | SERIAL | `PRIMARY KEY` | Identificador único do relacionamento | **Proposta de Modelo Relacional** |
+| `professional_id` | INTEGER | `NOT NULL`, `FOREIGN KEY` → `professionals.id` | Referência ao profissional | **Proposta de Modelo Relacional** |
+| `health_insurance_id` | INTEGER | `NOT NULL`, `FOREIGN KEY` → `health_insurances.id` | Referência ao plano de saúde aceito | **Proposta de Modelo Relacional** |
+| `active` | BOOLEAN | `DEFAULT TRUE` | Indica se o profissional ainda aceita o plano | **Proposta de Modelo Relacional** |
+| `created_at` | TIMESTAMP | `DEFAULT now()` | Data de criação do relacionamento | **Proposta de Modelo Relacional** |
 
 ---
 
@@ -47,10 +47,10 @@ Este documento descreve a estrutura de dados das duas abordagens propostas para 
 
 - **Campos comuns às duas propostas**: `id`, `email`, `created_at`, `updated_at`.
 - **Diferenças principais**:
-  - A **Proposta A** armazena os planos aceitos no campo `accepted_plans` (`JSONB`).
-  - A **Proposta B** utiliza tabelas normalizadas (`health_plans` e `professional_health_insurances`).
+  - A **Proposta de Modelo com JSONB** armazena os planos aceitos no campo `accepted_plans` (`JSONB`).
+  - A **Proposta de Modelo Relacional** utiliza tabelas normalizadas (`health_plans` e `professional_health_insurances`).
 - **Validação de e-mail** é feita com `CITEXT`, garantindo insensibilidade a maiúsculas/minúsculas.
-- **Coberturas** dentro do `JSONB` (Proposta A) ou (`coverage`) podem ser armazenadas como `TEXT[]` (Proposta B).
+- **Coberturas** dentro do `JSONB` (de Modelo com JSONB) ou (`coverage`) podem ser armazenadas como `TEXT[]` (Proposta de Modelo Relacional).
 - **Campos de auditoria** (`created_at`, `updated_at`) permitem controle temporal e versionamento simples.
 
 ---
