@@ -90,6 +90,29 @@ WHERE accepted_plans @> '[{"name": "Unimed"}]';
 
 ---
 
+### Exemplo de Inserção - Proposta de Modelo com JSONB
+```sql
+INSERT INTO professionals (name, email, accepted_plans, created_at, updated_at)
+VALUES (
+  'Dra. Mariana Silva',
+  'mariana.silva@exemplo.com',
+  '[
+      {"name": "Unimed", "category": "Regional", "coverage": ["Consultas", "Exames"], "active": true},
+      {"name": "SulAmérica", "category": "Nacional", "coverage": ["Consultas", "Exames", "Odontologia"], "active": true}
+   ]'::jsonb,
+  NOW(),
+  NOW()
+);
+
+```
+**Consulta exemplo:**
+```sql
+SELECT name, email
+FROM professionals
+WHERE accepted_plans @> '[{"name": "Unimed"}]';
+
+```
+
 ### 2. Proposta de Modelo Relacional
 
 #### Descrição
@@ -115,6 +138,37 @@ Cada profissional pode aceitar vários planos, e cada plano pode ser aceito por 
 Ideal em sistemas que precisam **garantir que os dados estejam corretos e auditáveis**, mesmo que isso exija mais estrutura e manutenção.
 
 ---
+
+### Exemplo de Inserção - Proposta de Modelo Relacional
+#### Criação de planos
+```sql
+INSERT INTO health_plans (name, category, coverage, active, created_at, updated_at)
+VALUES
+('Unimed', 'Regional', '{"Consultas", "Exames"}', true, NOW(), NOW()),
+('SulAmérica', 'Nacional', '{"Consultas", "Exames", "Odontologia"}', true, NOW(), NOW());
+
+```
+#### Criação de profissional
+```sql
+INSERT INTO professionals (name, email, created_at, updated_at)
+VALUES ('Dr. João Pereira', 'joao.pereira@exemplo.com', NOW(), NOW());
+```
+#### Associação do profissional aos planos
+```sql
+INSERT INTO professional_health_plans (professional_id, health_plan_id, created_at, updated_at)
+VALUES
+(1, 1, NOW(), NOW()),
+(1, 2, NOW(), NOW());
+
+```
+#### Consulta exemplo (JOIN)
+```sql
+SELECT p.name AS professional, hp.name AS plan
+FROM professionals p
+JOIN professional_health_plans php ON php.professional_id = p.id
+JOIN health_plans hp ON hp.id = php.health_plan_id;
+
+```
 
 ### 3. Reflexão sobre as abordagens
 
